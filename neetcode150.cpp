@@ -1080,6 +1080,65 @@ public:
 
       return false;
     }
+
+    string minWindow(string s, string t) {
+      int m = s.length();
+      int n = t.length();
+
+      if (m < n) {
+        return "";
+      }
+
+      map<char, int> tCharCount;
+      unordered_map<char, int> sCharCount;
+
+      for (int i = 0; i < n; i++) {
+        tCharCount[t[i]]++;
+      }
+
+      int i = 0, j = 0;
+
+      pair<int, int> retStringIndices;
+      bool match = false, found = false;
+
+      while (j < m) {
+        sCharCount[s[j]]++;
+
+        match = true;
+
+        for (auto pair : tCharCount) {
+          if (pair.second > sCharCount[pair.first]) {
+            match = false;
+            break;
+          }
+        }
+
+        if (match) {
+          retStringIndices = {i, j};
+          found = true;
+        }
+
+        if (found) {
+          if (match) {
+            sCharCount[s[j]]--;
+          } else {
+            j++;
+          }
+
+          sCharCount[s[i]]--;
+          i++;
+        } else {
+          j++;
+        }
+      }
+
+      return found ? s.substr(retStringIndices.first,
+                              retStringIndices.second - retStringIndices.first +
+                                  1)
+                   : "";
+    }
+
+    vector<int> maxSlidingWindow(vector<int> &nums, int k) {}
   };
 
   class LinkedList {
