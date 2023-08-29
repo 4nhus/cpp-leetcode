@@ -1035,6 +1035,51 @@ public:
 
       return maxLength;
     }
+
+    bool checkInclusion(string s1, string s2) {
+      if (s2.length() < s1.length()) {
+        return false;
+      }
+
+      unordered_map<char, int> charCountS1;
+
+      for (char c : s1) {
+        charCountS1[c]++;
+      }
+
+      unordered_map<char, int> charCountSubstringS2;
+
+      int i = 0;
+      int j = s1.size() - 1;
+
+      for (int k = i; k < j; k++) {
+        charCountSubstringS2[s2[k]]++;
+      }
+
+      while (j < s2.length()) {
+        charCountSubstringS2[s2[j]]++;
+
+        bool included = true;
+
+        for (auto pair : charCountS1) {
+          if (charCountS1[pair.first] != charCountSubstringS2[pair.first]) {
+            included = false;
+            break;
+          }
+        }
+
+        if (included) {
+          return true;
+        } else {
+          charCountSubstringS2[s2[i]]--;
+
+          i++;
+          j++;
+        }
+      }
+
+      return false;
+    }
   };
 
   class LinkedList {
