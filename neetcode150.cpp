@@ -1002,6 +1002,39 @@ public:
       return longestSubstringLength > substringLength ? longestSubstringLength
                                                       : substringLength;
     }
+
+    int characterReplacement(string s, int k) {
+      unordered_map<char, int> charFrequencies;
+
+      int i = 0, j = 0, maxLength = 0;
+
+      while (j < s.size()) {
+        charFrequencies[s[j]]++;
+
+        int highestFrequency = 0;
+
+        for (auto pair : charFrequencies) {
+          if (pair.second > highestFrequency) {
+            highestFrequency = pair.second;
+          }
+        }
+
+        if (j - i + 1 - highestFrequency > k) {
+          while (j - i + 1 - highestFrequency > k) {
+            charFrequencies[s[i]]--;
+            i++;
+          }
+        } else {
+          if (j - i + 1 > maxLength) {
+            maxLength = j - i + 1;
+          }
+        }
+
+        j++;
+      }
+
+      return maxLength;
+    }
   };
 
   class LinkedList {
