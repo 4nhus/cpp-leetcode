@@ -1350,5 +1350,56 @@ public:
         return head;
       };
     };
+
+    class copyListWithRandomPointer {
+      class Node {
+      public:
+        int val;
+        Node *next;
+        Node *random;
+
+        Node(int _val) {
+          val = _val;
+          next = NULL;
+          random = NULL;
+        }
+      };
+
+      Node *copyRandomList(Node *head) {
+        if (head == nullptr) {
+          return nullptr;
+        }
+
+        Node newHead = Node(head->val);
+
+        unordered_map<Node *, Node *> nodeAddresses;
+
+        nodeAddresses.insert({head, &newHead});
+
+        Node *curr = head;
+        Node *newCurr = &newHead;
+
+        while (curr->next != nullptr) {
+          Node nextNewNode = Node(curr->next->val);
+          nodeAddresses.insert({curr->next, &nextNewNode});
+          newCurr->next = &nextNewNode;
+          curr = curr->next;
+          newCurr = newCurr->next;
+        }
+
+        curr = head;
+        newCurr = &newHead;
+
+        while (curr != nullptr) {
+          if (curr->random != nullptr) {
+            newCurr->random = nodeAddresses[curr->random];
+          }
+          curr = curr->next;
+          newCurr = newCurr->next;
+        }
+
+        return &newHead;
+      };
+    };
   };
 };
