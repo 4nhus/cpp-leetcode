@@ -1370,25 +1370,25 @@ public:
           return nullptr;
         }
 
-        Node newHead = Node(head->val);
+        Node *newHead = new Node(head->val);
 
         unordered_map<Node *, Node *> nodeAddresses;
 
-        nodeAddresses.insert({head, &newHead});
+        nodeAddresses.insert({head, newHead});
 
         Node *curr = head;
-        Node *newCurr = &newHead;
+        Node *newCurr = newHead;
 
         while (curr->next != nullptr) {
-          Node nextNewNode = Node(curr->next->val);
-          nodeAddresses.insert({curr->next, &nextNewNode});
-          newCurr->next = &nextNewNode;
+          Node *nextNewNode = new Node(curr->next->val);
+          nodeAddresses.insert({curr->next, nextNewNode});
+          newCurr->next = nextNewNode;
           curr = curr->next;
           newCurr = newCurr->next;
         }
 
         curr = head;
-        newCurr = &newHead;
+        newCurr = newHead;
 
         while (curr != nullptr) {
           if (curr->random != nullptr) {
@@ -1398,7 +1398,102 @@ public:
           newCurr = newCurr->next;
         }
 
-        return &newHead;
+        return newHead;
+      };
+    };
+
+    class addTwoNumbersList {
+      struct ListNode {
+        int val;
+        ListNode *next;
+        ListNode() : val(0), next(nullptr) {}
+        ListNode(int x) : val(x), next(nullptr) {}
+        ListNode(int x, ListNode *next) : val(x), next(next) {}
+      };
+
+      ListNode *addTwoNumbers(ListNode *l1, ListNode *l2) {
+        ListNode *curr1 = l1;
+        ListNode *curr2 = l2;
+        ListNode *head;
+        int carry = 0;
+
+        if (curr1->val + curr2->val < 10) {
+          head = new ListNode(curr1->val + curr2->val);
+        } else {
+          carry = 1;
+          head = new ListNode(curr1->val + curr2->val - 10);
+        }
+
+        ListNode *curr3 = head;
+        curr1 = curr1->next;
+        curr2 = curr2->next;
+
+        while (curr1 != nullptr && curr2 != nullptr) {
+          ListNode *newNode;
+
+          if (curr1->val + curr2->val + carry < 10) {
+            newNode = new ListNode(curr1->val + curr2->val + carry);
+            carry = 0;
+          } else {
+            newNode = new ListNode(curr1->val + curr2->val + carry - 10);
+            carry = 1;
+          }
+
+          curr3->next = newNode;
+          curr1 = curr1->next;
+          curr2 = curr2->next;
+          curr3 = curr3->next;
+        }
+
+        if (curr1 == nullptr && curr2 == nullptr) {
+          if (carry == 1) {
+            curr3->next = new ListNode(1);
+          }
+        } else if (curr1 == nullptr) {
+          if (carry == 1) {
+            while (curr2 != nullptr) {
+              if (curr2->val + carry < 10) {
+                curr3->next = new ListNode(curr2->val + carry);
+                curr3->next->next = curr2->next;
+                carry = 0;
+                break;
+              } else {
+                curr3->next = new ListNode(curr2->val + carry - 10);
+                curr3 = curr3->next;
+                curr2 = curr2->next;
+              }
+            }
+
+            if (carry == 1) {
+              curr3->next = new ListNode(1);
+            }
+          } else {
+            curr3->next = curr2;
+          }
+        } else {
+          if (carry == 1) {
+            while (curr1 != nullptr) {
+              if (curr1->val + carry < 10) {
+                curr3->next = new ListNode(curr1->val + carry);
+                curr3->next->next = curr1->next;
+                carry = 0;
+                break;
+              } else {
+                curr3->next = new ListNode(curr1->val + carry - 10);
+                curr3 = curr3->next;
+                curr1 = curr1->next;
+              }
+            }
+
+            if (carry == 1) {
+              curr3->next = new ListNode(1);
+            }
+          } else {
+            curr3->next = curr1;
+          }
+        }
+
+        return head;
       };
     };
   };
