@@ -1138,7 +1138,50 @@ public:
                    : "";
     }
 
-    vector<int> maxSlidingWindow(vector<int> &nums, int k) {}
+    vector<int> maxSlidingWindow(vector<int> &nums, int k) {
+      if (nums.size() == 1) {
+        return nums;
+      }
+
+      int i = k - 1;
+
+      vector<int> ret;
+      deque<pair<int, int>> window;
+
+      for (int j = 0; j < i; j++) {
+        while (!window.empty() && nums[j] > window.back().first) {
+          window.pop_back();
+        }
+
+        window.push_back({nums[j], j});
+      }
+
+      while (i < nums.size()) {
+        if (window.empty()) {
+          ret.push_back(nums[i]);
+        } else {
+          if (nums[i] >= window.front().first) {
+            ret.push_back(nums[i]);
+          } else {
+            ret.push_back(window.front().first);
+          }
+
+          if (window.front().second = i - k + 1) {
+            window.pop_front();
+          }
+
+          while (!window.empty() && nums[i] > window.back().first) {
+            window.pop_back();
+          }
+
+          window.push_back({nums[i], i});
+        }
+
+        i++;
+      }
+
+      return ret;
+    }
   };
 
   class LinkedList {
