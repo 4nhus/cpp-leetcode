@@ -1319,7 +1319,36 @@ public:
         ListNode(int x, ListNode *next) : val(x), next(next) {}
       };
 
-      ListNode *removeNthFromEnd(ListNode *head, int n){};
+      ListNode *removeNthFromEnd(ListNode *head, int n) {
+        char numNodes = 1;
+        ListNode *curr = head;
+
+        while (curr->next != nullptr) {
+          numNodes++;
+          curr = curr->next;
+        }
+
+        if (n == numNodes) {
+          return head->next;
+        }
+
+        char currNode = 1;
+        curr = head;
+        ListNode *prev;
+
+        while (curr != nullptr) {
+          if (currNode == numNodes - n + 1) {
+            prev->next = curr->next;
+            break;
+          }
+
+          prev = curr;
+          currNode++;
+          curr = curr->next;
+        }
+
+        return head;
+      };
     };
   };
 };
