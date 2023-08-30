@@ -1277,7 +1277,37 @@ public:
         ListNode(int x, ListNode *next) : val(x), next(next) {}
       };
 
-      void reorderList(ListNode *head) {}
+      void reorderList(ListNode *head) {
+        if (head->next == nullptr) {
+          return;
+        }
+
+        ListNode *begin = head;
+        ListNode *beginNext = head->next;
+        ListNode *prev = head;
+        ListNode *end = head->next;
+
+        while (true) {
+          if (end == nullptr || beginNext->next == nullptr) {
+            break;
+          }
+
+          while (end->next != nullptr) {
+            end = end->next;
+            prev = prev->next;
+          }
+
+          begin->next = end;
+
+          end->next = beginNext;
+          prev->next = nullptr;
+
+          begin = beginNext;
+          beginNext = beginNext->next;
+          end = beginNext;
+          prev = begin;
+        }
+      }
     };
 
     class removeNthFromEndLinkedList {
