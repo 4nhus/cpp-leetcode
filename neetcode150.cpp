@@ -922,7 +922,6 @@ public:
       };
     };
   };
-  // Incomplete
 
   class SlidingWindow {
     int maxProfit(vector<int> &prices) {
@@ -1166,7 +1165,7 @@ public:
             ret.push_back(window.front().first);
           }
 
-          if (window.front().second = i - k + 1) {
+          if (window.front().second == i - k + 1) {
             window.pop_front();
           }
 
@@ -1184,6 +1183,7 @@ public:
     }
   };
 
+  // Incomplete
   class LinkedList {
     class reverseLinkedList {
       struct ListNode {
@@ -1232,17 +1232,36 @@ public:
           return list1;
         }
 
-        ListNode *head = list1->val < list2->val ? list1 : list2;
-        ListNode *prev1;
-        ListNode *prev2;
+        ListNode *head;
         ListNode *curr1 = list1;
         ListNode *curr2 = list2;
-        ListNode *next1;
-        ListNode *next2;
 
-        while (curr1->next != nullptr && curr2->next != nullptr) {
-          if (curr1->val < curr2->val) {
+        if (list1->val <= list2->val) {
+          head = list1;
+          curr1 = curr1->next;
+        } else {
+          head = list2;
+          curr2 = curr2->next;
+        }
+
+        ListNode *curr3 = head;
+
+        while (curr1 != nullptr && curr2 != nullptr) {
+          if (curr1->val <= curr2->val) {
+            curr3->next = curr1;
+            curr3 = curr3->next;
+            curr1 = curr1->next;
+          } else {
+            curr3->next = curr2;
+            curr3 = curr3->next;
+            curr2 = curr2->next;
           }
+        }
+
+        if (curr1 == nullptr) {
+          curr3->next = curr2;
+        } else if (curr2 == nullptr) {
+          curr3->next = curr1;
         }
 
         return head;
