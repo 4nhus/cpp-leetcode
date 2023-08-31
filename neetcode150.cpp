@@ -590,13 +590,75 @@ public:
       };
 
       ListNode *reverseKGroup(ListNode *head, int k) {
-        if (head->next == nullptr) {
+        if (head->next == nullptr || k == 1) {
           return head;
         }
-        int curr = 0;
 
-        for (ListNode *end = head; end != nullptr; end = end->next) {
+        int currInGroup = 1;
+        ListNode *curr = head;
+        ListNode *newHead = head;
+        ListNode *tailOfGroup = head;
+        ListNode *nextAfterGroup;
+        ListNode *firstBeforeGroup = nullptr;
+
+        while (true) {
+          while (curr->next != nullptr && currInGroup < k) {
+            curr = curr->next;
+            currInGroup++;
+          }
+
+          if (currInGroup == k) {
+            nextAfterGroup = curr->next;
+            curr->next = nullptr;
+            reverseList(tailOfGroup);
+            if (newHead == head) {
+              newHead = curr;
+            }
+
+            if (firstBeforeGroup != nullptr) {
+              firstBeforeGroup->next = curr;
+            }
+
+            // reconnect reversed to rest of list
+            tailOfGroup->next = nextAfterGroup;
+
+            // reset for next reversal
+            currInGroup = 1;
+            firstBeforeGroup = tailOfGroup;
+            tailOfGroup = nextAfterGroup;
+            curr = nextAfterGroup;
+
+          } else {
+            break;
+          }
+
+          if (curr == nullptr) {
+            break;
+          }
         }
+
+        return newHead;
+      }
+
+      ListNode *reverseList(ListNode *head) {
+        if (head == nullptr) {
+          return head;
+        }
+
+        ListNode *prev = nullptr;
+        ListNode *curr = head;
+        ListNode *next = head->next;
+
+        while (next != nullptr) {
+          curr->next = prev;
+          prev = curr;
+          curr = next;
+          next = next->next;
+        }
+
+        curr->next = prev;
+
+        return curr;
       }
     }
   };
