@@ -62,5 +62,14 @@ bool isSameTree(TreeNode *p, TreeNode *q) {
   }
 
   return p->val == q->val && isSameTree(p->left, q->left) &&
-         isSameTree(p->right && q->right);
+         isSameTree(p->right, q->right);
+}
+
+bool isSubtree(TreeNode *root, TreeNode *subRoot) {
+  if (root == nullptr) {
+    return false;
+  }
+
+  return isSameTree(root, subRoot) || isSubtree(root->left, subRoot) ||
+         isSubtree(root->right, subRoot);
 }
