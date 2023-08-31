@@ -1537,4 +1537,27 @@ public:
         return hasCycle;
       };
     };
+
+    int findDuplicate(vector<int> &nums) {
+      int slow = 0;
+      int fast = 0;
+
+      while (true) {
+        slow = nums[slow];
+        fast = nums[nums[fast]];
+        if (slow == fast) {
+          break;
+        }
+      }
+
+      int newSlow = 0;
+
+      while (newSlow != slow) {
+        newSlow = nums[newSlow];
+        slow = nums[slow];
+      }
+
+      return slow;
+    }
   };
+};
