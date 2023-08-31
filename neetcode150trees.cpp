@@ -43,3 +43,11 @@ int diameterOfBinaryTree(TreeNode *root) {
       max(diameterOfBinaryTree(root->left), diameterOfBinaryTree(root->right)),
       maxDepth(root->left) + maxDepth(root->right));
 }
+
+bool isBalanced(TreeNode *root) {
+  if (root == nullptr) {
+    return true;
+  }
+  return isBalanced(root->left) && isBalanced(root->right) &&
+         abs(maxDepth(root->left) - maxDepth(root->right)) <= 1;
+}
