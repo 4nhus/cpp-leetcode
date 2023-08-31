@@ -33,3 +33,13 @@ int maxDepth(TreeNode *root) {
 
   return max(maxDepth(root->left) + 1, maxDepth(root->right) + 1);
 }
+
+int diameterOfBinaryTree(TreeNode *root) {
+  if (root == nullptr) {
+    return 0;
+  }
+
+  return max(
+      max(diameterOfBinaryTree(root->left), diameterOfBinaryTree(root->right)),
+      maxDepth(root->left) + maxDepth(root->right));
+}
