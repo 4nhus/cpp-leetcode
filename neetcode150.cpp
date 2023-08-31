@@ -1559,5 +1559,93 @@ public:
 
       return slow;
     }
+
+    class LRUCache {
+    public:
+      LRUCache(int capacity) : capacity(capacity) {}
+
+      int get(int key) {
+        if (map.find(key) == map.end()) {
+          return -1;
+        } else {
+          ListNode *nodeToRead = map[key];
+
+          moveNode(nodeToRead);
+
+          return nodeToRead->val;
+        }
+      }
+
+      void put(int key, int value) {
+        if (map.size() == 0) {
+          head = new ListNode(key, value, nullptr);
+          tail = head;
+          map.insert({key, head});
+        } else {
+          if (map.find(key) == map.end()) {
+            insertNode(key, value);
+          } else {
+            ListNode *nodeToChange = map[key];
+            nodeToChange->val = value;
+
+            moveNode(nodeToChange);
+          }
+
+          if (map.size() > capacity) {
+            deleteHead();
+          }
+        }
+      }
+
+    private:
+      struct ListNode {
+        int key;
+        int val;
+        ListNode *next;
+        ListNode *prev;
+        ListNode(int x, int y, ListNode *z)
+            : key(x), val(y), next(nullptr), prev(z) {}
+      };
+
+      ListNode *head;
+      ListNode *tail;
+      unordered_map<int, ListNode *> map;
+      int capacity;
+
+      void deleteHead() {
+        map.erase(head->key);
+        ListNode *temp = head;
+        head = head->next;
+        head->prev = nullptr;
+        delete (temp);
+      }
+
+      void insertNode(int key, int value) {
+        ListNode *newNode = new ListNode(key, value, tail);
+        tail->next = newNode;
+        tail = newNode;
+        map.insert({key, newNode});
+      }
+
+      void moveNode(ListNode *node) {
+        if (map.size() > 1 && node != tail) {
+          if (node == head) {
+            head = head->next;
+            head->prev = nullptr;
+          }
+
+          tail->next = node;
+
+          if (node->prev != nullptr) {
+            node->prev->next = node->next;
+            node->next->prev = node->prev;
+          }
+
+          node->prev = tail;
+          node->next = nullptr;
+          tail = node;
+        }
+      }
+    };
   };
 };
