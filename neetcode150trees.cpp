@@ -51,3 +51,16 @@ bool isBalanced(TreeNode *root) {
   return isBalanced(root->left) && isBalanced(root->right) &&
          abs(maxDepth(root->left) - maxDepth(root->right)) <= 1;
 }
+
+bool isSameTree(TreeNode *p, TreeNode *q) {
+  if (p == nullptr && q == nullptr) {
+    return true;
+  } else if (p == nullptr) {
+    return false;
+  } else if (q == nullptr) {
+    return false;
+  }
+
+  return p->val == q->val && isSameTree(p->left, q->left) &&
+         isSameTree(p->right && q->right);
+}
