@@ -1647,5 +1647,84 @@ public:
         }
       }
     };
+
+    class mergeKSortedLists {
+      struct ListNode {
+        int val;
+        ListNode *next;
+        ListNode() : val(0), next(nullptr) {}
+        ListNode(int x) : val(x), next(nullptr) {}
+        ListNode(int x, ListNode *next) : val(x), next(next) {}
+      };
+
+      ListNode *mergeKLists(vector<ListNode *> &lists) {
+        if (lists.size() == 0) {
+          return nullptr;
+        } else if (lists.size() == 1) {
+          return lists[0];
+        }
+
+        vector<pair<ListNode *, ListNode *>> listPairsToMerge;
+        vector<ListNode *> mergedLists;
+
+        for (int i = 0; i < lists.size(); i++) {
+          listPairsToMerge.push_back({lists[i], lists[i + 1]});
+          i += 2;
+        }
+
+        if (lists.size() % 2 == 1) {
+          mergedLists.push_back(lists[lists.size() - 1]);
+        }
+
+        while (listPairsToMerge.size() != 1) {
+          for (int i = 0; i < listPairsToMerge.size(); i++) {
+            ListNode *list1;
+          }
+          listPairsToMerge.
+        }
+      }
+
+      ListNode *mergeTwoLists(ListNode *list1, ListNode *list2) {
+        if (list1 == nullptr) {
+          return list2;
+        } else if (list2 == nullptr) {
+          return list1;
+        }
+
+        ListNode *head;
+        ListNode *curr1 = list1;
+        ListNode *curr2 = list2;
+
+        if (list1->val <= list2->val) {
+          head = list1;
+          curr1 = curr1->next;
+        } else {
+          head = list2;
+          curr2 = curr2->next;
+        }
+
+        ListNode *curr3 = head;
+
+        while (curr1 != nullptr && curr2 != nullptr) {
+          if (curr1->val <= curr2->val) {
+            curr3->next = curr1;
+            curr3 = curr3->next;
+            curr1 = curr1->next;
+          } else {
+            curr3->next = curr2;
+            curr3 = curr3->next;
+            curr2 = curr2->next;
+          }
+        }
+
+        if (curr1 == nullptr) {
+          curr3->next = curr2;
+        } else if (curr2 == nullptr) {
+          curr3->next = curr1;
+        }
+
+        return head;
+      }
+    };
   };
 };
