@@ -1667,20 +1667,43 @@ public:
         vector<pair<ListNode *, ListNode *>> listPairsToMerge;
         vector<ListNode *> mergedLists;
 
-        for (int i = 0; i < lists.size(); i++) {
-          listPairsToMerge.push_back({lists[i], lists[i + 1]});
-          i += 2;
-        }
-
         if (lists.size() % 2 == 1) {
           mergedLists.push_back(lists[lists.size() - 1]);
+          lists.pop_back();
         }
 
-        while (listPairsToMerge.size() != 1) {
+        for (int i = 0; i < lists.size(); i += 2) {
+          listPairsToMerge.push_back({lists[i], lists[i + 1]});
+        }
+
+        while (true) {
           for (int i = 0; i < listPairsToMerge.size(); i++) {
-            ListNode *list1;
+            mergedLists.push_back(mergeTwoLists(listPairsToMerge[i].first,
+                                                listPairsToMerge[i].second));
           }
-          listPairsToMerge.
+
+          if (mergedLists.size() == 1) {
+            return mergedLists[0];
+          }
+
+          listPairsToMerge.clear();
+
+          ListNode *oddListOut = nullptr;
+
+          if (mergedLists.size() % 2 == 1) {
+            oddListOut = mergedLists[mergedLists.size() - 1];
+            mergedLists.pop_back();
+          }
+
+          for (int i = 0; i < mergedLists.size(); i += 2) {
+            listPairsToMerge.push_back({mergedLists[i], mergedLists[i + 1]});
+          }
+
+          mergedLists.clear();
+
+          if (oddListOut != nullptr) {
+            mergedLists.push_back(oddListOut);
+          }
         }
       }
 
