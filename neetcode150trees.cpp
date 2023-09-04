@@ -177,3 +177,43 @@ class countGoodNodesInBinaryTree {
     countGoodNodes(count, root->right, max);
   }
 };
+
+class validateBinarySearchTree {
+  bool isValidBST(TreeNode *root) {
+    if (root == nullptr) {
+      return true;
+    }
+
+    if (root->left == nullptr && root->right == nullptr) {
+      return true;
+    } else if (root->left == nullptr) {
+      return validateBST(root->right, root->val, LLONG_MAX);
+    } else if (root->right == nullptr) {
+      return validateBST(root->left, LLONG_MIN, root->val);
+    } else {
+      return validateBST(root->right, root->val, LLONG_MAX) &&
+             validateBST(root->left, LLONG_MIN, root->val);
+    }
+  }
+
+  bool validateBST(TreeNode *root, long min, long max) {
+    if (root == nullptr) {
+      return true;
+    }
+
+    if (root->val <= min || root->val >= max) {
+      return false;
+    }
+
+    if (root->left == nullptr && root->right == nullptr) {
+      return true;
+    } else if (root->left == nullptr) {
+      return validateBST(root->right, root->val, max);
+    } else if (root->right == nullptr) {
+      return validateBST(root->left, min, root->val);
+    } else {
+      return validateBST(root->right, root->val, max) &&
+             validateBST(root->left, min, root->val);
+    }
+  }
+};
