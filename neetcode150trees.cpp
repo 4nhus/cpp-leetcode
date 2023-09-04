@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <queue>
 
 using namespace std;
 
@@ -83,3 +84,44 @@ TreeNode *lowestCommonAncestor(TreeNode *root, TreeNode *p, TreeNode *q) {
     return root;
   }
 }
+
+class binaryTreeLevelOrderTraversal {
+  vector<vector<int>> levelOrder(TreeNode *root) {
+    vector<vector<int>> ret;
+
+    if (root == nullptr) {
+      return ret;
+    }
+
+    queue<pair<TreeNode *, short>> nodeQueue;
+    nodeQueue.push({root, 0});
+
+    short currentLevel = 0;
+    vector<int> nodesInCurrentLevel;
+
+    while (!nodeQueue.empty()) {
+      pair<TreeNode *, short> node = nodeQueue.front();
+      nodeQueue.pop();
+
+      if (node.second != currentLevel) {
+        ret.push_back(nodesInCurrentLevel);
+        currentLevel++;
+        nodesInCurrentLevel.clear();
+      }
+
+      nodesInCurrentLevel.push_back(node.first->val);
+
+      if (node.first->left != nullptr) {
+        nodeQueue.push({node.first->left, currentLevel + 1});
+      }
+
+      if (node.first->right != nullptr) {
+        nodeQueue.push({node.first->right, currentLevel + 1});
+      }
+    }
+
+    ret.push_back(nodesInCurrentLevel);
+
+    return ret;
+  }
+};
