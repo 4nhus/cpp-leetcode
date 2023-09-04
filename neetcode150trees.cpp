@@ -152,3 +152,28 @@ class binaryTreeRightSideView {
     }
   }
 };
+
+class countGoodNodesInBinaryTree {
+  int goodNodes(TreeNode *root) {
+    int count = 1;
+
+    countGoodNodes(count, root->left, root->val);
+    countGoodNodes(count, root->right, root->val);
+
+    return count;
+  }
+
+  void countGoodNodes(int &count, TreeNode *root, int max) {
+    if (root == nullptr) {
+      return;
+    }
+
+    if (root->val >= max) {
+      count++;
+      max = root->val;
+    }
+
+    countGoodNodes(count, root->left, max);
+    countGoodNodes(count, root->right, max);
+  }
+};
