@@ -239,3 +239,68 @@ class kthSmallestElementInABST {
     addNodes(values, root->right);
   }
 };
+
+class constructBinaryTreeFromPreorderAndInorderTraversal {
+  TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder) {
+    TreeNode *root = new TreeNode(preorder[0]);
+
+    int numLeft;
+    int numRight;
+
+    for (int i = 0; i < preorder.size(); i++) {
+      if (inorder[i] == root->val) {
+        numLeft = i;
+        numRight = preorder.size() - 1 - numLeft;
+        break;
+      }
+    }
+
+    if (numLeft != 0) {
+      root->left =
+          recursiveBuildTree(preorder, inorder, 1, numLeft, 0, numLeft - 1);
+    }
+
+    if (numRight != 0) {
+      root->right = recursiveBuildTree(preorder, inorder, numLeft + 1,
+                                       preorder.size() - 1, numLeft + 1,
+                                       preorder.size() - 1);
+    }
+
+    return root;
+  }
+
+  TreeNode *recursiveBuildTree(vector<int> preorder, vector<int> inorder,
+                               int preorderStart, int preorderEnd,
+                               int inorderStart, int inorderEnd) {
+    if (preorderStart == preorderEnd) {
+      return new TreeNode(preorder[preorderStart]);
+    } else {
+      TreeNode *root = new TreeNode(preorder[preorderStart]);
+
+      int numLeft;
+      int numRight;
+
+      for (int i = inorderStart; i < inorderEnd + 1; i++) {
+        if (inorder[i] == root->val) {
+          numLeft = i - inorderStart;
+          numRight = preorderEnd - preorderStart - numLeft;
+          break;
+        }
+      }
+
+      if (numLeft != 0) {
+        root->left = recursiveBuildTree(preorder, inorder, preorderStart + 1,
+                                        preorderStart + numLeft, inorderStart,
+                                        numLeft - 1 + inorderStart);
+      }
+
+      if (numRight != 0) {
+        root->right = recursiveBuildTree(
+            preorder, inorder, preorderStart + numLeft + 1, preorderEnd,
+            inorderStart + numLeft + 1, inorderEnd);
+      }
+
+      return root;
+    }
+  }
+};
