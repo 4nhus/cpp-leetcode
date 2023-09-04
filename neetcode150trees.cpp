@@ -304,3 +304,30 @@ class constructBinaryTreeFromPreorderAndInorderTraversal {
     }
   }
 };
+
+class binaryTreeMaximumPathSum {
+  int maxPathSum(TreeNode *root) {
+    int ret = root->val;
+    maxPathSumNoSplit(root, ret);
+    return ret;
+  }
+
+  int maxPathSumNoSplit(TreeNode *root, int &ret) {
+    if (!root) {
+      return 0;
+    }
+
+    int leftMax = maxPathSumNoSplit(root->left, ret);
+    int rightMax = maxPathSumNoSplit(root->right, ret);
+    if (leftMax < 0) {
+      leftMax = 0;
+    }
+    if (rightMax < 0) {
+      rightMax = 0;
+    }
+
+    ret = max(ret, root->val + leftMax + rightMax);
+
+    return root->val + max(leftMax, rightMax);
+  }
+};
