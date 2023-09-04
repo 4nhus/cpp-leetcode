@@ -217,3 +217,25 @@ class validateBinarySearchTree {
     }
   }
 };
+
+class kthSmallestElementInABST {
+  int kthSmallest(TreeNode *root, int k) {
+    vector<int> values;
+
+    addNodes(values, root);
+
+    sort(values.begin(), values.end());
+
+    return values[k - 1];
+  }
+
+  void addNodes(vector<int> &values, TreeNode *root) {
+    if (root == nullptr) {
+      return;
+    }
+
+    values.push_back(root->val);
+    addNodes(values, root->left);
+    addNodes(values, root->right);
+  }
+};
