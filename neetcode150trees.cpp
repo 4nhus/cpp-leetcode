@@ -125,3 +125,30 @@ class binaryTreeLevelOrderTraversal {
     return ret;
   }
 };
+
+class binaryTreeRightSideView {
+  vector<int> rightSideView(TreeNode *root) {
+    if (root == nullptr) {
+      vector<int> ret;
+      return ret;
+    }
+
+    vector<int> ret(maxDepth(root));
+
+    fillOutView(ret, root, 0);
+
+    return ret;
+  }
+
+  void fillOutView(vector<int> &ret, TreeNode *root, int depth) {
+    ret[depth] = root->val;
+
+    if (root->left != nullptr) {
+      fillOutView(ret, root->left, depth + 1);
+    }
+
+    if (root->right != nullptr) {
+      fillOutView(ret, root->right, depth + 1);
+    }
+  }
+};
