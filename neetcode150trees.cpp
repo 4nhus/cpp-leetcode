@@ -361,6 +361,7 @@ class serialiseAndDeserialiseBinaryTree {
     if (root) {
       ret.append(to_string(root->val));
       ret.append(".");
+
       preorderTraverse(root->left, ret);
       preorderTraverse(root->right, ret);
     } else {
