@@ -26,6 +26,35 @@ class generatePowerSet {
     subset.pop_back();
     recursiveSubsets(ret, subset, nums, index + 1);
   }
+
+  vector<vector<int>> subsetsWithDup(vector<int> &nums) {
+    sort(nums.begin(), nums.end());
+
+    vector<vector<int>> ret;
+    vector<int> subset;
+
+    recursiveSubsetsWithDup(ret, subset, nums, 0);
+
+    return ret;
+  }
+
+  void recursiveSubsetsWithDup(vector<vector<int>> &ret, vector<int> &subset,
+                               vector<int> nums, int index) {
+    if (index == nums.size()) {
+      ret.push_back(subset);
+      return;
+    }
+
+    subset.push_back(nums[index]);
+    recursiveSubsetsWithDup(ret, subset, nums, index + 1);
+    subset.pop_back();
+
+    while (index + 1 < nums.size() && nums[index] == nums[index + 1]) {
+      index++;
+    }
+
+    recursiveSubsetsWithDup(ret, subset, nums, index + 1);
+  }
 };
 
 class generateCombinationSums {
