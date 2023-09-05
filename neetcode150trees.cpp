@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <queue>
+#include <string>
 
 using namespace std;
 
@@ -241,7 +242,8 @@ class kthSmallestElementInABST {
 };
 
 class constructBinaryTreeFromPreorderAndInorderTraversal {
-  TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder) {
+public:
+  static TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder) {
     TreeNode *root = new TreeNode(preorder[0]);
 
     int numLeft;
@@ -269,9 +271,9 @@ class constructBinaryTreeFromPreorderAndInorderTraversal {
     return root;
   }
 
-  TreeNode *recursiveBuildTree(vector<int> preorder, vector<int> inorder,
-                               int preorderStart, int preorderEnd,
-                               int inorderStart, int inorderEnd) {
+  static TreeNode *recursiveBuildTree(vector<int> preorder, vector<int> inorder,
+                                      int preorderStart, int preorderEnd,
+                                      int inorderStart, int inorderEnd) {
     if (preorderStart == preorderEnd) {
       return new TreeNode(preorder[preorderStart]);
     } else {
@@ -329,5 +331,75 @@ class binaryTreeMaximumPathSum {
     ret = max(ret, root->val + leftMax + rightMax);
 
     return root->val + max(leftMax, rightMax);
+  }
+};
+
+class serialiseAndDeserialiseBinaryTree {
+  // Encodes a tree to a single string
+  string serialize(TreeNode *root) {
+    string ret = "";
+
+    preorderTraverse(root, ret);
+
+    return ret;
+  }
+
+  // Decodes your encoded data to tree
+  TreeNode *deserialize(string data) {
+    if (data == "N") {
+      return nullptr;
+    }
+
+    int count = 0;
+
+    TreeNode *root = reconstructTree(data, count);
+
+    return root;
+  }
+
+  void preorderTraverse(TreeNode *root, string &ret) {
+    if (root) {
+      ret.append(to_string(root->val));
+      ret.append(".");
+      preorderTraverse(root->left, ret);
+      preorderTraverse(root->right, ret);
+    } else {
+      ret.append("N");
+    }
+  }
+
+  TreeNode *reconstructTree(string data, int &count) {
+    TreeNode *root;
+
+    if (data[count] == 'N') {
+      root = nullptr;
+      count++;
+    } else if (data[count] == '-') {
+      string digits = "";
+
+      for (int i = count + 1; data[i] != '.'; i++) {
+        digits += data[i];
+      }
+
+      root = new TreeNode(-stoi(digits));
+      count += (2 + digits.length());
+
+      root->left = reconstructTree(data, count);
+      root->right = reconstructTree(data, count);
+    } else {
+      string digits = "";
+
+      for (int i = count; data[i] != '.'; i++) {
+        digits += data[i];
+      }
+
+      root = new TreeNode(stoi(digits));
+      count += (1 + digits.length());
+
+      root->left = reconstructTree(data, count);
+      root->right = reconstructTree(data, count);
+    }
+
+    return root;
   }
 };
