@@ -95,6 +95,54 @@ class generateCombinationSums {
       combination.pop_back();
     }
   }
+
+  vector<vector<int>> combinationSum2(vector<int> &candidates, int target) {
+    sort(candidates.begin(), candidates.end());
+
+    int maxIndex = candidates.size();
+
+    for (int i = 0; i < candidates.size(); i++) {
+      if (candidates[i] > target) {
+        maxIndex = i;
+        break;
+      }
+    }
+
+    vector<vector<int>> ret;
+    vector<int> combination;
+
+    recursiveCombinationSum2(ret, combination, candidates, 0, target, 0,
+                             maxIndex);
+    return ret;
+  }
+
+  void recursiveCombinationSum2(vector<vector<int>> &ret,
+                                vector<int> &combination,
+                                vector<int> candidates, int sum, int target,
+                                int index, int maxIndex) {
+    if (sum == target) {
+      ret.push_back(combination);
+      return;
+    } else if (index == maxIndex) {
+      return;
+    } else if (sum > target) {
+      return;
+    }
+
+    combination.push_back(candidates[index]);
+    recursiveCombinationSum2(ret, combination, candidates,
+                             sum + candidates[index], target, index + 1,
+                             maxIndex);
+    combination.pop_back();
+
+    while (index + 1 < candidates.size() &&
+           candidates[index] == candidates[index + 1]) {
+      index++;
+    }
+
+    recursiveCombinationSum2(ret, combination, candidates, sum, target,
+                             index + 1, maxIndex);
+  }
 };
 
 vector<vector<int>> permute(vector<int> &nums) {
