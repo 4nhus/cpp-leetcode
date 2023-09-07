@@ -216,3 +216,61 @@ class wordSearch {
     }
   }
 };
+
+class palindromePartitioning {
+  vector<vector<string>> partition(string s) {
+    vector<vector<string>> ret;
+    vector<string> partition;
+
+    recursivePartition(ret, partition, "", s, 0, false);
+
+    return ret;
+  }
+
+  void recursivePartition(vector<vector<string>> &ret, vector<string> partition,
+                          string currS, string s, int index,
+                          bool prevIsPalindrome) {
+    if (index == s.length()) {
+      if (!partition.empty() && prevIsPalindrome) {
+        ret.push_back(partition);
+      }
+
+      return;
+    }
+
+    currS += s[index];
+
+    if (isPalindrome(currS)) {
+      // no expansion
+      partition.push_back(currS);
+      recursivePartition(ret, partition, "", s, index + 1, true);
+
+      // expansion
+      partition.pop_back();
+    }
+
+    recursivePartition(ret, partition, currS, s, index + 1, false);
+  }
+
+  bool isPalindrome(string s) {
+    vector<char> chars;
+
+    for (char c : s) {
+      chars.push_back(c);
+    }
+
+    int i = 0;
+    int j = chars.size() - 1;
+
+    while (i < j) {
+      if (chars[i] != chars[j]) {
+        return false;
+      }
+
+      i++;
+      j--;
+    }
+
+    return true;
+  }
+};
