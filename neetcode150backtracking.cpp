@@ -274,3 +274,40 @@ class palindromePartitioning {
     return true;
   }
 };
+
+class letterCombinationsOfAPhoneNumber {
+  vector<string> letterCombinations(string digits) {
+    vector<string> ret;
+
+    if (digits.length() != 0) {
+      unordered_map<char, vector<char>> digitToLetterMap;
+      digitToLetterMap[2 + '0'] = {'a', 'b', 'c'};
+      digitToLetterMap[3 + '0'] = {'d', 'e', 'f'};
+      digitToLetterMap[4 + '0'] = {'g', 'h', 'i'};
+      digitToLetterMap[5 + '0'] = {'j', 'k', 'l'};
+      digitToLetterMap[6 + '0'] = {'m', 'n', 'o'};
+      digitToLetterMap[7 + '0'] = {'p', 'q', 'r', 's'};
+      digitToLetterMap[8 + '0'] = {'t', 'u', 'v'};
+      digitToLetterMap[9 + '0'] = {'w', 'x', 'y', 'z'};
+
+      recursiveLetterCombinations(ret, digitToLetterMap, "", digits, 0);
+    }
+
+    return ret;
+  }
+
+  void recursiveLetterCombinations(
+      vector<string> &ret, unordered_map<char, vector<char>> digitToLetterMap,
+      string combination, string digits, int index) {
+    if (index == digits.length() && combination.length() == digits.length()) {
+      ret.push_back(combination);
+    }
+
+    for (char letter : digitToLetterMap[digits[index]]) {
+      recursiveLetterCombinations(ret, digitToLetterMap, combination + letter,
+                                  digits, index + 1);
+      recursiveLetterCombinations(ret, digitToLetterMap, combination, digits,
+                                  index + 1);
+    }
+  }
+};
