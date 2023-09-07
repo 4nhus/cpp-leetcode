@@ -311,3 +311,118 @@ class letterCombinationsOfAPhoneNumber {
     }
   }
 };
+
+class nQueens {
+  vector<vector<string>> solveNQueens(int n) {
+    vector<vector<string>> ret;
+    vector<vector<char>> board(n);
+
+    for (int row = 0; row < n; row++) {
+      for (int col = 0; col < n; col++) {
+        board[row].push_back('.');
+      }
+    }
+
+    unordered_set<int> occupiedCols;
+
+    recursiveSolveQueens(ret, board, 0, 0, 0, occupiedCols);
+
+    return ret;
+  }
+
+  void recursiveSolveQueens(vector<vector<string>> &ret,
+                            vector<vector<char>> &board, int row, int col,
+                            int numQueens, unordered_set<int> &occupiedCols) {
+    if (row == board.size() && numQueens == board.size()) {
+      ret.push_back(convertBoardToStringVector(board));
+    }
+
+    if (col == board.size() || row == board.size()) {
+      return;
+    }
+
+    if (queenCanBePlacedInCell(board, row, col, occupiedCols)) {
+      board[row][col] = 'Q';
+      occupiedCols.insert(col);
+
+      recursiveSolveQueens(ret, board, row + 1, 0, numQueens + 1, occupiedCols);
+
+      board[row][col] = '.';
+      occupiedCols.erase(col);
+
+      recursiveSolveQueens(ret, board, row, col + 1, numQueens, occupiedCols);
+    } else {
+      recursiveSolveQueens(ret, board, row, col + 1, numQueens, occupiedCols);
+    }
+  }
+
+  bool queenCanBePlacedInCell(vector<vector<char>> &board, int row, int col,
+
+                              unordered_set<int> occupiedCols) {
+    if (occupiedCols.count(col) == 1) {
+      return false;
+    }
+
+    return checkURDiagonal(board, row - 1, col + 1, board.size()) &&
+           checkLRDiagonal(board, row + 1, col + 1, board.size()) &&
+           checkULDiagonal(board, row - 1, col - 1, board.size()) &&
+           checkLLDiagonal(board, row + 1, col - 1, board.size());
+  }
+
+  bool checkURDiagonal(vector<vector<char>> board, int row, int col, int n) {
+    if (row < 0 || row == n || col < 0 || col == n) {
+      return true;
+    } else if (board[row][col] == 'Q') {
+      return false;
+    } else {
+      return checkURDiagonal(board, row - 1, col + 1, n);
+    }
+  }
+
+  bool checkLRDiagonal(vector<vector<char>> board, int row, int col, int n) {
+    if (row < 0 || row == n || col < 0 || col == n) {
+      return true;
+    } else if (board[row][col] == 'Q') {
+      return false;
+    } else {
+      return checkLRDiagonal(board, row + 1, col + 1, n);
+    }
+  }
+
+  bool checkULDiagonal(vector<vector<char>> board, int row, int col, int n) {
+    if (row < 0 || row == n || col < 0 || col == n) {
+      return true;
+    } else if (board[row][col] == 'Q') {
+      return false;
+    } else {
+      return checkULDiagonal(board, row - 1, col - 1, n);
+    }
+  }
+
+  bool checkLLDiagonal(vector<vector<char>> board, int row, int col, int n) {
+    if (row < 0 || row == n || col < 0 || col == n) {
+      return true;
+    } else if (board[row][col] == 'Q') {
+      return false;
+    } else {
+      return checkLLDiagonal(board, row + 1, col - 1, n);
+    }
+  }
+
+  vector<string> convertBoardToStringVector(vector<vector<char>> board) {
+    vector<string> boardString;
+    string rowString;
+
+    for (int row = 0; row < board.size(); row++) {
+      rowString = "";
+
+      for (int col = 0; col < board.size(); col++) {
+        rowString += board[row][col];
+      }
+
+      boardString.push_back(rowString);
+    }
+
+    return boardString;
+  }
+};
