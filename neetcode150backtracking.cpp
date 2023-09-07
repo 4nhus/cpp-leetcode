@@ -1,3 +1,4 @@
+#include <string>
 #include <unordered_set>
 #include <vector>
 
@@ -158,3 +159,60 @@ vector<vector<int>> permute(vector<int> &nums) {
 
   return ret;
 }
+
+class wordSearch {
+  bool exist(vector<vector<char>> &board, string word) {
+    if (board.size() * board[0].size() < word.length()) {
+      return false;
+    }
+
+    vector<vector<char>> newBoard;
+
+    for (char row = 0; row < board.size(); row++) {
+      for (char col = 0; col < board[0].size(); col++) {
+        newBoard = board;
+        if (findWord(newBoard, row, col, 0, word)) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  bool findWord(vector<vector<char>> &board, int row, int col, int index,
+                string targetWord) {
+    if (row < 0 || row >= board.size() || col < 0 || col >= board[0].size()) {
+      return false;
+    }
+
+    if (index == targetWord.length()) {
+      return true;
+    }
+
+    if (board[row][col] == '-') {
+      return false;
+    }
+
+    if (board[row][col] == targetWord[index]) {
+      if (index + 1 == targetWord.length()) {
+        return true;
+      }
+
+      board[row][col] = '-';
+
+      if (findWord(board, row - 1, col, index + 1, targetWord) ||
+          findWord(board, row + 1, col, index + 1, targetWord) ||
+          findWord(board, row, col - 1, index + 1, targetWord) ||
+          findWord(board, row, col + 1, index + 1, targetWord)) {
+        return true;
+      }
+
+      board[row][col] = targetWord[index];
+
+      return false;
+    } else {
+      return false;
+    }
+  }
+};
