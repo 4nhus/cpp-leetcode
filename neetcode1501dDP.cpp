@@ -7,7 +7,7 @@ int climbStairs(int n) {
     return 1;
   }
 
-  vector<int> numWaysToStep(n + 1);
+  int numWaysToStep[n + 1];
 
   numWaysToStep[0] = 1;
   numWaysToStep[1] = 1;
